@@ -19,7 +19,3 @@ double rq(double r,int32_t n)
 	}
 	return result;
 }
-
-
-
-
