@@ -1,6 +1,7 @@
-all:	hw0403.c header3.o
-	gcc -o main hw0403.c header3.o
-header3:
-	gcc -c header3.c
+all:	hw0402-2.c header2.o
+	gcc -o main hw0402-2.c header2.o
+header2:
+	gcc -c header2.c
 clean:
 	rm -f *.o
+	rm -f main
