@@ -8,10 +8,14 @@ void getRoman(intt);
 //hw0402
 void hanoi_re(intt, intt, intt, intt, intt);
 void hanoi_it(intt);
+void hanoi_it_v(intt);
+intt gT(intt pole[]);
+intt getEmpty(intt pole[]);
+void move(intt s[], intt d[], intt);
 intt mv(intt);
 //hw0403
 void go();
-double getFactorial(intt);
+double getFactorial(int64_t);
 //hw0404
 double rq(double r, intt n);
 //hw0405

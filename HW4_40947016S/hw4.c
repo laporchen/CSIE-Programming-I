@@ -73,6 +73,7 @@ void hanoi_it(intt num)
                 exB = B;
                 B = A;
                 A++;
+                exA++;
                 if (exA > num)
                 {
                     A = 21;
@@ -84,6 +85,7 @@ void hanoi_it(intt num)
                 exA = A;
                 A = B;
                 B++;
+                exB++;
                 if (exB > num)
                 {
                     B = 21;
@@ -98,6 +100,7 @@ void hanoi_it(intt num)
                 exC = C;
                 C = A;
                 A++;
+                exA++;
                 if (exA > num)
                 {
                     A = 21;
@@ -109,6 +112,7 @@ void hanoi_it(intt num)
                 exA = A;
                 A = C;
                 C++;
+                exC++;
                 if (exC > num)
                 {
                     C = 21;
@@ -123,6 +127,7 @@ void hanoi_it(intt num)
                 exC = C;
                 C = A;
                 B++;
+                exB++;
                 if (exB > num)
                 {
                     B = 21;
@@ -134,6 +139,7 @@ void hanoi_it(intt num)
                 exB = B;
                 B = C;
                 C++;
+                exC++;
                 if (exC > num)
                 {
                     C = 21;
@@ -151,6 +157,7 @@ void hanoi_it(intt num)
                 exC = C;
                 C = A;
                 A++;
+                exA++;
                 if (exA > num)
                 {
                     A = 21;
@@ -162,6 +169,7 @@ void hanoi_it(intt num)
                 exA = A;
                 A = C;
                 C++;
+                exC++;
                 if (exC > num)
                 {
                     C = 21;
@@ -176,6 +184,7 @@ void hanoi_it(intt num)
                 exB = B;
                 B = A;
                 A++;
+                exA++;
                 if (exA > num)
                 {
                     A = 21;
@@ -187,6 +196,7 @@ void hanoi_it(intt num)
                 exA = A;
                 A = B;
                 B++;
+                exB++;
                 if (exB > num)
                 {
                     B = 21;
@@ -201,6 +211,7 @@ void hanoi_it(intt num)
                 exC = C;
                 C = B;
                 B++;
+                exB++;
                 if (exB > num)
                 {
                     B = 21;
@@ -212,6 +223,7 @@ void hanoi_it(intt num)
                 exB = B;
                 B = C;
                 C++;
+                exC++;
                 if (exC > num)
                 {
                     C = 21;
@@ -229,13 +241,113 @@ int32_t mv(intt n)
         r *= 2;
     return r - 1;
 }
+void hanoi_it_v(intt n)
+{
+    intt A[21], B[21], C[21];
+    //init array
+    intt passingV = n;
+    A[20] = 21, B[20] = 21, C[20] = 21;
+    for (intt i = 0; i < 20; i++)
+    {
+        if (i < n)
+        {
+            A[19 - i] = passingV;
+            B[i] = 0;
+            C[i] = 0;
+            passingV--;
+        }
+        else
+        {
+            A[19 - i] = 0;
+            B[i] = 0;
+            C[i] = 0;
+        }
+    }
+    intt moves = mv(n);
+    if (n % 2 == 0)
+    {
+        for (intt i = 0; i < moves; i++)
+        {
+            if (A[gT(A)] < B[gT(B)])
+                move(A, B, 2);
+            else
+                move(B, A, 1);
+            i++;
+            if (A[gT(A)] < C[gT(C)])
+                move(A, C, 3);
+            else
+                move(C, A, 1);
+            i++;
+            if (i >= moves)
+                break;
+            if (i >= moves)
+                break;
+            if (B[gT(B)] < C[gT(C)])
+                move(B, C, 3);
+            else
+                move(C, B, 2);
+        }
+    }
+    else
+    {
+        for (intt i = 0; i < moves; i++)
+        {
+            if (A[gT(A)] < C[gT(C)])
+                move(A, C, 3);
+            else
+                move(C, A, 1);
+            i++;
+            if (i >= moves)
+                break;
+            if (A[gT(A)] < B[gT(B)])
+                move(A, B, 2);
+            else
+                move(B, A, 1);
+            i++;
+            if (i >= moves)
+                break;
+            if (B[gT(B)] < C[gT(C)])
+                move(B, C, 3);
+            else
+                move(C, B, 2);
+        }
+    }
+}
+intt getEmpty(intt *pole)
+{
+    for (int i = 0; i < 21; i++)
+        if (pole[i] != 0)
+        {
+            //printf("Empty is %d\n", i - 1);
+            return i - 1;
+        }
+    printf("Empty is 19\n");
+    return 19;
+}
+intt gT(intt *pole)
+{
+    for (int i = 0; i < 21; i++)
+        if (pole[i] != 0)
+        {
+            //printf("Top is %d\n", pole[i]);
+            return i;
+        }
+
+    return 21;
+}
+void move(intt *s, intt *d, intt rod)
+{
+    printf("Move disk %d to rod %d\n", s[gT(s)], rod);
+    d[getEmpty(d)] = s[gT(s)];
+    s[gT(s)] = 0;
+}
 //hw0403
 void go()
 {
-    intt k;
+    int64_t k;
     double result = 0;
     printf("k-th order Taylor polynomial for e\nPlease enter k: ");
-    if (scanf("%d", &k) != 1 || k <= 0)
+    if (scanf("%ld", &k) != 1 || k <= 0)
     {
         printf("ERROR\n");
         return;
@@ -247,7 +359,7 @@ void go()
     printf("%.20lf\n", result);
     return;
 }
-double getFactorial(intt n)
+double getFactorial(int64_t n)
 {
     if (n == 1 || n == 0)
     {
