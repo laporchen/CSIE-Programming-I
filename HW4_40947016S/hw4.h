@@ -2,6 +2,7 @@
 #include "stdint.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "time.h"
 #define intt int32_t
 //hw0401
 void getRoman(intt);

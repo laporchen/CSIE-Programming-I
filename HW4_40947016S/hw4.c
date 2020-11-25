@@ -391,6 +391,7 @@ double rq(double r, int32_t n)
 //hw0405
 intt getCode()
 {
+    srand(time(NULL));
     intt a[4]; //four digits
     intt result = 0;
     int used[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
