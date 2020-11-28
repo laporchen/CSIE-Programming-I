@@ -497,7 +497,7 @@ intt game(intt input, intt answer)
     intt round = 1;
     while (1)
     {
-        printf("Round %4d >>>", round);
+        printf("Round %4d >>> ", round);
         intt input = getInput();
         if (input == -1)
         {
