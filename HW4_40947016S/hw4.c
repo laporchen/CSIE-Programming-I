@@ -395,11 +395,8 @@ intt getCode()
     intt a[4]; //four digits
     intt result = 0;
     int used[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    a[0] = rand() % 9 + 1;
-    used[a[0]] = 1;
-    result += a[0] * 1000;
-    int pow = 100;
-    for (intt i = 1; i < 4; i++)
+    int pow = 1000;
+    for (intt i = 0; i < 4; i++)
     {
         while (1)
         {
@@ -435,7 +432,7 @@ intt checkInput(intt a)
 intt getInput()
 {
     intt input;
-    if (scanf("%d", &input) != 1 || (input > 9999 || input < 1000))
+    if (scanf("%d", &input) != 1 || (input > 9999 || input < 0))
     {
         return -1;
     }
@@ -450,7 +447,10 @@ intt correct(intt input, intt ans)
     if (input == ans)
     {
         printf("\033[0m");
-        printf("Your Guess: %d\nResponse: ", input);
+        if (input < 1000)
+            printf("Your Guess: 0%d\nResponse: ", input);
+        else
+            printf("Your Guess: %d\nResponse: ", input);
         printf("\033[1;32m");
         printf("BINGO! Congratulations.\n");
         printf("\033[0m");
@@ -482,7 +482,10 @@ intt correct(intt input, intt ans)
         }
         B -= A;
         printf("\033[0m");
-        printf("Your Guess: %d\nResponse: ", input);
+        if (input < 1000)
+            printf("Your Guess: 0%d\nResponse: ", input);
+        else
+            printf("Your Guess: %d\nResponse: ", input);
         printf("\033[0;31m");
         printf("%d A ", A);
         printf("\033[0;34m");
