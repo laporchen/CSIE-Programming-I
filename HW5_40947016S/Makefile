@@ -1,5 +1,5 @@
 CC:=gcc
-objects = hw0501 hw0502 hw0503 hw0504 hw0505
+objects = hw0501 hw0502 hw0503 hw0505 hw0504
 all: $(objects)
 
 $(objects): %: %.c hw5.o
