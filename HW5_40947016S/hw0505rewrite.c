@@ -5,7 +5,7 @@
 #define intt int32_t
 intt allInput(intt *width, intt *height, intt *mine);
 intt input(intt *a, intt range0, intt range1);
-intt getChoice(intt *o, intt *r, intt *c, intt width, intt height, intt *open);
+intt getChoice(intt *o, intt *c, intt *r, intt width, intt height, intt *open);
 void drawGrid(intt *num, intt w, intt h, intt *open);
 void modifySquare(intt *game, intt *mine, intt *open, intt x, intt y, intt w, intt h, intt option);
 void game();
@@ -98,7 +98,7 @@ intt input(intt *a, intt range0, intt range1)
     }
     return 0;
 }
-intt getChoice(intt *o, intt *y, intt *x, intt width, intt height, intt *open)
+intt getChoice(intt *o, intt *x, intt *y, intt width, intt height, intt *open)
 {
 
     while (1)
@@ -162,7 +162,8 @@ void drawGrid(intt *num, intt w, intt h, intt *open)
             }
             else if (*((open + i * h) + j) == 0)
                 printf("  *");
-        }
+        	printf("\033[0;39m");
+	}
         printf("\n");
     }
 }
@@ -198,7 +199,7 @@ void modifySquare(intt *game, intt *mine, intt *open, intt x, intt y, intt w, in
         }
     }
 
-    if (option == 2)
+    else if (option == 2)
     {
         if (*openloc == 2)
             *openloc = 0;
@@ -206,7 +207,7 @@ void modifySquare(intt *game, intt *mine, intt *open, intt x, intt y, intt w, in
             *openloc = 2;
         return;
     }
-    if (option == 3)
+    else if (option == 3)
     {
         if (*mineloc == -1)
         {
@@ -222,18 +223,15 @@ void modifySquare(intt *game, intt *mine, intt *open, intt x, intt y, intt w, in
             *openloc = 1;
             intt xo[2] = {-1, 1};
             intt yo[2] = {-1, 1};
-            for (intt i = 0; i < 2; i++)
-                for (intt j = 0; j < 2; j++)
-                {
-                    if ((y + yo[i]) * (x + xo[j]) < 0 || (y + yo[i]) >= h - 1 || (x + xo[j]) >= w - 1)
-                        continue;
-                    else if (*((open + (y + yo[i]) * h) + x + xo[j]) == 1)
-                        continue;
-                    else
-                    {
-                        modifySquare(game, mine, open, x + xo[j], y + yo[i], w, h, 3);
-                    }
-                }
+            if (!((y + yo[0]) * (x) < 0 || (y + yo[0]) >= h - 1 || (x) >= w - 1))
+                modifySquare(game, mine, open, x, y + yo[0], w, h, 3);
+            if (!((y + yo[1]) * (x) < 0 || (y + yo[1]) >= h - 1 || (x) >= w - 1))
+                modifySquare(game, mine, open, x, y + yo[1], w, h, 3);
+            if (!((y) * (x + xo[0]) < 0 || (y >= h - 1 || (x) + xo[0] >= w - 1)))
+                modifySquare(game, mine, open, x + xo[0], y, w, h, 3);
+            if (!((y) * (x + xo[1]) < 0 || (y >= h - 1 || (x) + xo[1] >= w - 1)))
+                modifySquare(game, mine, open, x + xo[1], y, w, h, 3);
         }
+		return;
+         }
     }
-}
