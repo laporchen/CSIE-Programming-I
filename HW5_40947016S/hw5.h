@@ -14,11 +14,12 @@ void matrixR(intt[4][4]);
 intt func();
 void printp(intt[], intt);
 //hw0504
-void game();
-intt input(intt *, intt, intt);
+
+//hw0505
 intt allInput(intt *width, intt *height, intt *mine);
-void drawGrid(intt *a, intt w, intt h, intt *open, intt mode);
-intt getChoice(intt *o, intt *r, intt *c, intt width, intt height);
-intt modifyGrid(intt *array, intt o, intt r, intt c, intt height, intt mode);
-void recursiveBlank(intt *map, intt x, intt y, intt h, intt w, intt *open);
-//mode 1 for mine,2 for gui,3 for mine random
+intt input(intt *a, intt range0, intt range1);
+intt getChoice(intt *o, intt *c, intt *r, intt width, intt height, intt *open);
+intt getunOpenSquare(intt *open, intt w, intt h);
+void drawGrid(intt *num, intt w, intt h, intt *open);
+void modifySquare(intt *game, intt *mine, intt *open, intt x, intt y, intt w, intt h, intt option);
+void game();

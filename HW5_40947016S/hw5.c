@@ -232,132 +232,80 @@ void printp(intt a[], intt size)
         printf("\n");
     }
 }
+
+//hw0505
 void game()
 {
     srand(time(NULL));
-    intt width, height, mine;
-    //initial inputs
-    if (allInput(&width, &height, &mine))
+    intt w, h, mine;
+    if (allInput(&w, &h, &mine))
         return;
-    intt mineArray[height][width], numArray[height][width], opened[height][width], mask[height][width];
-    //init arrays
-    for (intt i = 0; i < height; i++)
+    intt map[h][w];              //showing on screen,also saving flag placement
+    intt open[h][w];             //checking is the square opened
+    intt num[h][w];              //store mine place and mine counter
+    for (intt i = 0; i < h; i++) //init arrays
     {
-        for (intt j = 0; j < width; j++)
+        for (intt j = 0; j < w; j++)
         {
-            mineArray[i][j] = 0;
-            numArray[i][j] = 0;
-            opened[i][j] = 0;
-            mask[i][j] = 1;
+            num[i][j] = 0;
+            map[i][j] = 0;
+            open[i][j] = 0;
         }
     }
-    //init mine locations
-    while (mine)
+    intt mineCount = mine;
+    intt mx, my; //random location for mine
+    while (mine) //init mine location
     {
-        intt x = rand() % width;
-        intt y = rand() % height;
-        if (modifyGrid(&mineArray[0][0], 0, y, x, height, 3))
+        mx = rand() % w;
+        my = rand() % h;
+        if (num[my][mx] == 0)
         {
+            num[my][mx] = -1;
             mine--;
         }
     }
-    //init numArray
-    for (intt i = 0; i < height; i++)
+
+    for (intt i = 0; i < h; i++) //caculate mine counter
     {
-        for (intt j = 0; j < width; j++)
+        for (intt j = 0; j < w; j++)
         {
 
+            if (num[i][j] == -1)
+                continue;
             intt counter = 0;
-            for (intt x = -1; x <= 1; x++)
-            {
-                for (intt y = -1; y <= 1; y++)
+            for (intt p = -1; p < 2; p++)
+                for (intt q = -1; q < 2; q++)
                 {
-                    if ((x == 0 && y == 0) || (((j + x) < 0) || (j + x == width)) || (((i + y) < 0) || (i + y == height)))
+                    if ((p + i) < 0 || (q + j) < 0 || p + i >= h || q + j >= w)
                         continue;
-                    if (mineArray[i + y][j + x] == 1)
+                    if (num[p + i][q + j] == -1)
                         counter++;
                 }
-            }
-            if (mineArray[i][j] == 1)
-            {
-                counter = -1;
-            }
-            numArray[i][j] = counter;
+            num[i][j] = counter;
         }
     }
-    intt game = 1;
-    intt option, row, column;
-    //main loop
+    intt game = 1; //check whether the game is end
+    intt option;   //get player's choice(1 is open,2 is flag)
+    intt x, y;     //chosen square
     while (game)
     {
-        drawGrid(&numArray[0][0], width, height, &opened[0][0], 1);
-        drawGrid(&mineArray[0][0], width, height, &opened[0][0], 2);
-        drawGrid(&numArray[0][0], width, height, &opened[0][0], 2);
-        //drawGrid(&mineArray[0][0], width, height);
-        while (1)
-        {
-            if (getChoice(&option, &row, &column, width, height))
-                if (modifyGrid(&opened[0][0], option, row, column, height, 2))
-                    break;
-        }
-        if (option == 1)
-            recursiveBlank(&numArray[0][0], column, row, height, width, &opened[0][0]);
+        drawGrid(&num[0][0], w, h, &open[0][0]);
+        getChoice(&option, &x, &y, w, h, &open[0][0]);
+        //printf("y = %d,x = %d\n", y, x);
+        modifySquare(&game, &num[0][0], &open[0][0], x, y, w, h, option);
+        //printf("unopen %d\n", getunOpenSquare(&open[0][0], w, h));
+        if (!(getunOpenSquare(&open[0][0], w, h) - mineCount))
+            break;
     }
-}
-//draw gameGrid
-void drawGrid(intt *array, intt w, intt h, intt *open, intt mode)
-{
-    if (mode == 1)
+    if (game == 0)
     {
-        printf("    ");
-        for (intt i = 0; i < w; i++)
-        {
-            printf("%3d", i);
-        }
-        printf("\n");
-        for (intt i = 0; i < w * 3 + 5; i++)
-        {
-            printf("-");
-        }
-        printf("\n");
-        for (intt j = 0; j < h; j++)
-        {
-            printf("%3d|", j);
-            for (intt i = 0; i < w; i++)
-            {
-                if (*((open + i * h) + j) == 1)
-                    if (*((array + i * h) + j) != 0)
-                        printf("%3d", *((array + i * h) + j));
-                    else
-                        printf("   ");
-                else if (*((open + i * h) + j) == 0)
-                    printf("  *");
-            }
-            printf("\n");
-        }
+        printf("\033[1;31mYou hit a mine,You lose.\n");
+        return;
     }
-    if (mode == 2)
+    else
     {
-        printf("    ");
-        for (intt i = 0; i < w; i++)
-        {
-            printf("%3d", i);
-        }
-        printf("\n");
-        for (intt i = 0; i < w * 3 + 5; i++)
-        {
-            printf("-");
-        }
-        printf("\n");
-        for (intt j = 0; j < h; j++)
-        {
-            printf("%3d|", j);
-            for (intt i = 0; i < w; i++)
-            {
-                printf("%3d", *((array + i * h) + j));
-            }
-            printf("\n");
-        }
+        printf("\033[1;31mYou win!\n");
+        return;
     }
 }
 intt allInput(intt *width, intt *height, intt *mine)
@@ -369,7 +317,7 @@ intt allInput(intt *width, intt *height, intt *mine)
     if (input(height, 10, 16))
         return 1;
     printf("Please enter the mine number (30-90): ");
-    if (input(mine, 10, 90))
+    if (input(mine, 30, 90))
         return 1;
 }
 intt input(intt *a, intt range0, intt range1)
@@ -381,124 +329,184 @@ intt input(intt *a, intt range0, intt range1)
     }
     return 0;
 }
-intt getChoice(intt *o, intt *r, intt *c, intt width, intt height)
+intt getChoice(intt *o, intt *x, intt *y, intt width, intt height, intt *open)
 {
-    printf("Your Option (1:Open, 2: Flag): ");
+
     while (1)
     {
+        printf("Your Option (1:Open, 2: Flag): ");
         if (!input(o, 1, 2))
             break;
     }
-    printf("Position (row,column): ");
     while (1)
     {
-        if (!input(r, 0, width - 1) && !input(c, 0, height - 1))
-            break;
+        printf("Position (row,column): ");
+        if (!input(y, 0, width - 1) && !input(x, 0, height - 1))
+        {
+            intt *openloc = ((open + *y * height) + *x);
+            if (*o == 1 && *openloc == 1)
+            {
+                printf("Square is already opened.\n");
+                y = NULL;
+                x = NULL;
+            }
+            else if (*o == 1 && *openloc == 2)
+            {
+                printf("Square is flagged.\n");
+                y = NULL;
+                x = NULL;
+            }
+
+            else
+            {
+                break;
+            }
+        }
     }
     return 1;
 }
-intt modifyGrid(intt *array, intt o, intt r, intt c, intt height, intt mode)
+void drawGrid(intt *num, intt w, intt h, intt *open)
 {
-    if (mode == 2)
+    printf("\n");
+    { //index print
+        printf("    ");
+        for (intt i = 0; i < w; i++)
+        {
+            printf("%3d", i);
+        }
+        printf("\n");
+        for (intt i = 0; i < w * 3 + 5; i++)
+        {
+            printf("-");
+        }
+        printf("\n");
+    }
+    intt color[8] = {34, 32, 31, 35, 36, 33, 43, 41};
+    for (intt i = 0; i < h; i++)
     {
-        if (*((array + c * height) + r) != 0)
+        printf("\033[0;39m");
+        printf("%3d|", i);
+        for (intt j = 0; j < w; j++)
+        {
+            printf("\033[0;39m");
+            //printf("%d %d\n", *num, *open);
+            if (*open == 2)
+            {
+                printf("  \033[1;47m\033[1;31mF");
+                *open++;
+                *num++;
+                continue;
+            }
+            if (*open == 1)
+            {
+                if (*num == -1)
+                {
+                    printf("  M");
+                    *open++;
+                    *num++;
+                    continue;
+                }
+                if (*num != 0)
+                {
+
+                    printf("\033[0;%dm%3d", color[*num - 1], *num);
+                    *open++;
+                    *num++;
+                    continue;
+                }
+                if (*num == 0)
+                {
+                    printf("   ");
+                    *open++;
+                    *num++;
+                    continue;
+                }
+            }
+            else if (*open == 0)
+            {
+                printf("  *");
+                *open++;
+                *num++;
+                continue;
+            }
+        }
+        printf("\n");
+    }
+}
+void modifySquare(intt *game, intt *mine, intt *open, intt x, intt y, intt w, intt h, intt option)
+{
+    intt *openloc = ((open + y * h) + x);
+    intt *mineloc = ((mine + y * h) + x);
+    //printf("%d %d\n", *open, *mine);
+    //printf("openloc = %d,mineloc = %d\n", *openloc, *mineloc);
+    if (option == 1)
+    {
+        if (*mineloc == -1)
+        {
+            *game = 0;
+            return;
+        }
+        if (*mineloc != 0)
+        {
+            *openloc = 1;
+            return;
+        }
+        if (*mineloc == 0)
+        {
+            *openloc = 1;
+            for (intt i = -1; i < 2; i++)
+            {
+                for (intt j = -1; j < 2; j++)
+                {
+
+                    if (y + i >= h || y + i < 0 || x + j < 0 || x + j >= w)
+                        continue;
+
+                    if ((*(open + (y + i) * h + x + j)) == 1)
+                        continue;
+                    if ((*(open + (y + i) * h + x + j)) == 2)
+                        continue;
+                    if ((*(mine + (y + i) * h + x + j)) == -1)
+                        continue;
+                    if ((*(mine + (y + i) * h + x + j)) != 0)
+                    {
+                        *(open + (y + i) * h + x + j) = 1;
+                        continue;
+                    }
+                    //printf("y+i = %d,x+j = %d\n", y + i, x + j);
+                    if ((*(mine + (y + i) * h + x + j)) == 0)
+                        modifySquare(game, mine, open, x + j, y + i, w, h, 1);
+                }
+            }
+            return;
+        }
+    }
+
+    else if (option == 2)
+    {
+        if (*openloc == 1)
         {
             printf("Square is already opened.\n");
-            return 0;
+            return;
         }
-        return 1;
+        if (*openloc == 2)
+            *openloc = 0;
+        else
+            *openloc = 2;
+        return;
     }
-    else if (mode == 3)
-    {
-        if (*((array + c * height) + r) == 0)
-        {
-            *((array + c * height) + r) = 1;
-            return 1;
-        }
-        return 0;
-    }
-    *((array + c * height) + r) = o;
-    return 0;
 }
-void recursiveBlank(intt *map, intt x, intt y, intt h, intt w, intt *open)
+intt getunOpenSquare(intt *open, intt w, intt h)
 {
-    if ((*((open + y * h) + x)) == 1)
-        return;
-    printf("x is %d,y is %d,open is %d\n", x, y, *((open + y * h) + x));
-
-    if ((*((open + y * h) + x)) == 0 && (*((map + y * h) + x) == 0))
+    intt returnValue = 0;
+    for (intt i = 0; i < h; i++)
     {
-        printf("change [%d][%d] to 1\n", y, x);
-        modifyGrid(open, 1, y, x, h, 1);
-        if (y > 0 && x > 0 && y < h - 1 && x < w - 1) // not on edge
+        for (intt j = 0; j < w; j++)
         {
-            recursiveBlank(map, x - 1, y, h, w, open);
-            recursiveBlank(map, x, y - 1, h, w, open);
-            recursiveBlank(map, x, y + 1, h, w, open);
-            recursiveBlank(map, x + 1, y, h, w, open);
-        }
-        else if (y > 0 && x > 0) //right, bottom,right bottom corner
-        {
-            if (y < h - 1 && x == w - 1)
-            {
-                recursiveBlank(map, x, y + 1, h, w, open);
-                recursiveBlank(map, x, y - 1, h, w, open);
-                recursiveBlank(map, x - 1, y, h, w, open);
-            }
-            else if (y == h - 1 && x < w - 1)
-            {
-                recursiveBlank(map, x + 1, y, h, w, open);
-                recursiveBlank(map, x - 1, y, h, w, open);
-                recursiveBlank(map, x, y - 1, h, w, open);
-            }
-            else if (y == h - 1 && x == w - 1)
-            {
-                recursiveBlank(map, x - 1, y, h, w, open);
-                recursiveBlank(map, x, y - 1, h, w, open);
-            }
-        }
-        else if (y >= 0 && x == 0) // left,left top/bottom corner
-        {
-            if (y == 0)
-            {
-                recursiveBlank(map, x, y + 1, h, w, open);
-                recursiveBlank(map, x + 1, y, h, w, open);
-            }
-            else if (y < h - 1)
-            {
-                recursiveBlank(map, x, y + 1, h, w, open);
-                recursiveBlank(map, x, y - 1, h, w, open);
-                recursiveBlank(map, x + 1, y, h, w, open);
-            }
-            else if (y == h - 1)
-            {
-                recursiveBlank(map, x, y - 1, h, w, open);
-                recursiveBlank(map, x + 1, y, h, w, open);
-            }
-        }
-        else if (y == 0 && x > 0)
-        {
-            if (x == w - 1) //
-            {
-                recursiveBlank(map, x - 1, y, h, w, open);
-                recursiveBlank(map, x, y + 1, h, w, open);
-            }
-            else
-            {
-                recursiveBlank(map, x - 1, y, h, w, open);
-                recursiveBlank(map, x + 1, y, h, w, open);
-                recursiveBlank(map, x, y + 1, h, w, open);
-            }
+            if (*open == 0)
+                returnValue++;
+            *open++;
         }
     }
-    else if (*((map + y * h) + x) != -1)
-    {
-        modifyGrid(open, 1, y, x, h, 1);
-    }
-    else
-    {
-        printf("[%d][%d] is mine\n", y, x);
-        return;
-    }
-    return;
+    return returnValue;
 }
