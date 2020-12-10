@@ -78,29 +78,31 @@ intt func()
 {
     intt p1, p2;
     printf("Please enter p1 degree: ");
-    if (scanf("%d", &p1) != 1 || p1 < 0)
+    if (scanf("\n%d", &p1) != 1 || p1 < 0)
         return -1;
     printf("Please enter p1 coefficients: ");
-    intt p1c[p1 + 1];
+    intt p1c[p1 + 1], p1p[p1 + 1];
     for (intt i = 0; i < p1 + 1; i++)
     {
         if (scanf("\n%d", &p1c[i]) != 1)
             return -1;
+        p1p[i] = p1c[i];
     }
     printf("Please enter p2 degree: ");
-    if (scanf("%d", &p2) != 1 || p1 < 0)
+    if (scanf("\n%d", &p2) != 1 || p2 < 0)
         return -1;
     printf("Please enter p2 coefficients: ");
-    intt p2c[p2 + 1];
+    intt p2c[p2 + 1], p2p[p2 + 1];
     for (intt i = 0; i < p2 + 1; i++)
     {
         if (scanf("\n%d", &p2c[i]) != 1)
             return -1;
+        p2p[i] = p2c[i];
     }
     printf("p1: ");
-    printp(p1c, p1 + 1);
+    printp(p1p, p1 + 1);
     printf("p2: ");
-    printp(p2c, p2 + 1);
+    printp(p2p, p2 + 1);
     intt max = p1;
     if (p2 > max)
         max = p2;
@@ -120,15 +122,16 @@ intt func()
     //put inputs to new arrays
     for (intt i = 0; i < max + 1; i++)
     {
-
         if (p1 == max)
         {
             pn1[i] = p1c[i];
         }
         else
         {
+
             if (p1copy >= 0)
             {
+                //printf("p1c[%d] %d \n", p1copy, p1c[p1copy]);
                 pn1[max - i] = p1c[p1copy];
                 p1copy--;
             }
@@ -136,22 +139,21 @@ intt func()
 
         if (p2 == max)
         {
-
             pn2[i] = p2c[i];
         }
         else
         {
             if (p2copy >= 0)
             {
+                //printf("p2c[%d] %d \n", p1copy, p2c[p2copy]);
                 pn2[max - i] = p2c[p2copy];
                 p2copy--;
             }
         }
+        printf("pn1[%d] = %d,p1c[%d] = %d\n", i, pn1[i], i, p1c[i]);
+        printf("pn2[%d] = %d,p2c[%d] = %d\n", i, pn2[i], i, p2c[i]);
     }
-    /*  for (intt i = 0; i < max + 1; i++)
-        printf("pn1[%d]:%d\n", i, pn1[i]);
-    for (intt i = 0; i < max + 1; i++)
-        printf("pn2[%d]:%d\n", i, pn2[i]);*/
+
     intt lz1 = 0, lz2 = 0; //get leading zeros
     for (intt i = 0; i < max + 1; i++)
     {
@@ -167,7 +169,6 @@ intt func()
     }
     for (intt i = 0; i < p1 + p2 + 1; i++)
         mul[i] = 0; //init mul[]
-
     for (intt i = 0; i < max + 1; i++)
         for (intt j = 0; j < max + 1; j++)
         {
@@ -210,7 +211,7 @@ void printp(intt a[], intt size)
         {
             printf("%dx", a[i]);
         }
-        else if (a[i] != 0)
+        else
         {
             printf("%dx^%d", a[i], c);
         }
@@ -218,10 +219,25 @@ void printp(intt a[], intt size)
         {
             printf(" + ");
         }
-        else
+        else if (a[i + 1] < 0)
         {
             printf(" - ");
             a[i + 1] = -(a[i + 1]);
+        }
+        else
+        {
+            for (intt j = i + 1; j < size; j++)
+            {
+                if (a[j] != 0)
+                {
+                    if (a[j] > 0)
+                        printf(" + ");
+                    else
+                    {
+                        printf(" - ");
+                    }
+                }
+            }
         }
         c--;
     }
@@ -232,7 +248,7 @@ void printp(intt a[], intt size)
         printf("\n");
     }
 }
-
+//hw0504
 //hw0505
 void game()
 {
