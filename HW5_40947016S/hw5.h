@@ -14,7 +14,10 @@ void matrixR(intt[4][4]);
 intt func();
 void printp(intt[], intt);
 //hw0504
-
+intt getRegression();
+double avg(double *inputs, intt num); //num = 1 for sum
+double alpha(double ya, double xa, double b);
+double beta(double xa, double ya, double *x, double *y, intt n);
 //hw0505
 intt allInput(intt *width, intt *height, intt *mine);
 intt input(intt *a, intt range0, intt range1);

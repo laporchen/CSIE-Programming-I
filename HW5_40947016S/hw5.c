@@ -86,6 +86,12 @@ intt func()
     {
         if (scanf("\n%d", &p1c[i]) != 1)
             return -1;
+        if (i == 0 && p1c[0] == 0)
+        {
+            printf("Leading coefficient shouldn't be 0.\n");
+            return -1;
+        }
+
         p1p[i] = p1c[i];
     }
     printf("Please enter p2 degree: ");
@@ -97,6 +103,11 @@ intt func()
     {
         if (scanf("\n%d", &p2c[i]) != 1)
             return -1;
+        if (i == 0 && p2c[0] == 0)
+        {
+            printf("Leading coefficient shouldn't be 0.\n");
+            return -1;
+        }
         p2p[i] = p2c[i];
     }
     printf("p1: ");
@@ -249,6 +260,63 @@ void printp(intt a[], intt size)
     }
 }
 //hw0504
+intt getRegression()
+{
+    double a, b; // result y = ax + b
+    intt num;
+    printf("Please enter the point number: ");
+    if (scanf("%d", &num) != 1 && num <= 0)
+        return 1;
+    double pointx[num];
+    double pointy[num];
+    double xa, ya;
+    for (intt i = 0; i < num; i++)
+    {
+        printf("Please enter the point %d: ", i + 1);
+        if (scanf("%lf", &pointx[i]) != 1 || scanf("%lf", &pointy[i]) != 1)
+            return 1;
+    }
+    xa = avg(&pointx[0], num);
+    ya = avg(&pointy[0], num);
+    intt sumx = avg(&pointx[0], 1), sumy = avg(&pointy[0], 1);
+    b = beta(xa, ya, &pointx[0], &pointy[0], num);
+    a = alpha(ya, xa, b);
+    if (a != 0 && b != 0)
+        printf("Regression Equation: y = %.2lf x + %.2lf\n", b, a);
+    else if (a == 0 && b != 0)
+        printf("Regression Equation: y = %.2lf x \n", b);
+    else if (a != 0 && b == 0)
+        printf("Regression Equation: y = %.2lf\n", a);
+    else if (a == 0 && b == 0)
+        printf("Regression Equation: y = 0\n");
+    return 0;
+}
+double alpha(double ya, double xa, double b)
+{
+    return ya - (xa * b);
+}
+double beta(double xa, double ya, double *x, double *y, intt n)
+{
+    double a = 0, c = 0;
+    for (intt i = 0; i < n; i++)
+    {
+        a += (*x - xa) * (*y - ya);
+        c += (*x - xa) * (*x - xa);
+        *x++;
+        *y++;
+    }
+    return a / c;
+}
+double avg(double *inputs, intt num)
+{
+    double result = 0;
+    for (intt i = 0; i < num; i++)
+    {
+        result += *inputs;
+        *inputs++;
+    }
+    return result / num;
+}
 //hw0505
 void game()
 {
