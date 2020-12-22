@@ -514,13 +514,13 @@ void drawGrid(intt *num, intt w, intt h, intt *open)
                 continue;
             }
         }
-        printf("\n");
+        printf("\033[0;39m\n");
     }
 }
 void modifySquare(intt *game, intt *mine, intt *open, intt x, intt y, intt w, intt h, intt option)
 {
-    intt *openloc = ((open + y * h) + x);
-    intt *mineloc = ((mine + y * h) + x);
+    intt *openloc = ((open + y * w) + x);
+    intt *mineloc = ((mine + y * w) + x);
     //printf("%d %d\n", *open, *mine);
     //printf("openloc = %d,mineloc = %d\n", *openloc, *mineloc);
     if (option == 1)
