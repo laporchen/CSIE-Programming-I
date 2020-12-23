@@ -4,52 +4,30 @@
 #include <stdio.h>
 #define intt int32_t
 
+void nn(int **p,int s);
+
 int main()
 {
-	int a = 2;
-	int b = a+ 20;
-	int c = 0;
-	for(int i = 0;i<b;i++)
+	int a;
+	printf("Give me a number: ");
+	scanf("%d",&a);
+	int *ptr = NULL;
+	nn(&ptr,a);
+	for(int i = 0;i<a * a;i++)
 	{
-	 c++;
-	 for(int g = 0;g<c;g++)
-	 	printf("\\");
-	 printf("/");
-	 for(int j =c+1;j<b;j++)
-	 	printf("\\");
-	
-	 for(int p = b;p>c+1;p--)
-	 	printf("/");
-	 printf("\\");
-	 for(int r = c;r>0;r--)
-	 	printf("/");
-	
-	 printf("\n");
-
+		printf("%4d",*(ptr+i));
+		if(i%a== a-1)
+			printf("\n");
 	}
-	a = 2;
-	b = a+20;
-	c = 0;
-	for(int i = 0;i<b;i++)
+}
+void nn(int * *p,int s)
+{
+	*p =  calloc(sizeof(int32_t),s);
+	for(int i = 0;i<s;i++)
 	{
-	 c++;
-		for(int p = b;p>c+1;p--)
-	 		printf("/");
-	 printf("\\");
-	 for(int r = c;r>0;r--)
-	 	printf("/");
-
-	 for(int g = 0;g<c;g++)
-	 	printf("\\");
-	 printf("/");
-	 for(int j =c+1;j<b;j++)
-	 	printf("\\");
-	
-	
-	 printf("\n");
-	}	
-	
-	return 0;
+		for(int j = 0;j<s;j++)
+			*(*p + i*s + j) = (i+1) *(j+1); 
+	}
+	return;
 
 }
-
