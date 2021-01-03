@@ -18,6 +18,39 @@ void numModify(i64 *input, i32 choice, uint32_t change)
 	ui8 *modify = (ui8 *)input;
 	*(modify + choice - 1) = change;
 }
+//hw0602
+void printNum(i32 *arr, i32 index)
+{
+	printf("Result : ");
+	for (i32 i = 0; i < index; i++)
+	{
+		if (*(arr + i) != -1)
+		{
+			printf("%4d ", *(arr + i));
+		}
+	}
+	printf("\n");
+	return;
+}
+void redo(i32 *index)
+{
+	*index++;
+	return;
+}
+void undo(i32 *index)
+{
+	*index--;
+	return;
+}
+void moveback(i32 *arr)
+{
+	for (i32 i = 1; i < 10; i++)
+	{
+		*(arr + i - 1) = *(arr + i);
+	}
+	*(arr + 9) = -1;
+	return;
+}
 //hw0603
 void rotate(double *x, double *y, double theta)
 {
