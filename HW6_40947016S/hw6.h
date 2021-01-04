@@ -4,6 +4,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #define i8 int8_t
+#define ui8 uint8_t
 #define i32 int32_t
 #define i64 int64_t
 //hw0601
@@ -18,3 +19,9 @@ void moveback(i32 *arr);
 void rotate(double *x, double *y, double theta);
 //hw0604
 //hw0605
+void print_card(ui8[]);
+void sort_card(ui8, void(*func));
+i32 checks(ui8[], ui8[], ui8[], ui8[]);
+void func01(ui8[]);
+void func02(ui8[]);
+void func03(ui8[]);
