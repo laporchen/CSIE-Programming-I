@@ -60,6 +60,56 @@ void rotate(double *x, double *y, double theta)
 	return;
 }
 //hw0604
+void printPlane(i32 p[4])
+{
+	char a[3] = "xyz";
+	printf("The plane is ");
+	i32 first = 1;
+	for (i32 i = 0; i < 3; i++)
+	{
+		if (p[i] == 0)
+		{
+			continue;
+		}
+		else
+		{
+			if (first)
+			{
+				printf("%d%c", p[i], a[i]);
+				first = 0;
+			}
+			else
+			{
+				if (p[i] > 0)
+				{
+					printf("+%d%c", p[i], a[i]);
+				}
+				else
+				{
+					printf("%d%c", p[i], a[i]);
+				}
+			}
+		}
+	}
+	printf(" = ");
+	printf("%d\n", p[3]);
+	return;
+}
+void project(double *ix, double *iy, double *iz, i32 ia, i32 ib, i32 ic, i32 id)
+{
+	double x = *ix;
+	double y = *iy;
+	double z = *iz;
+	double a = (double)ia;
+	double b = (double)ib;
+	double c = (double)ic;
+	double d = (double)id;
+	double rx = x + a * (d - (x * a + y * b + z * c)) / (a * a + b * b + c * c);
+	double ry = y + b * (d - (x * a + y * b + z * c)) / (a * a + b * b + c * c);
+	double rz = z + c * (d - (x * a + y * b + z * c)) / (a * a + b * b + c * c);
+	printf("The projection is (%.2lf %.2lf %.2lf)\n", rx, ry, rz);
+	return;
+}
 //hw0605
 i32 checks(ui8 a[], ui8 b[], ui8 c[], ui8 d[])
 {

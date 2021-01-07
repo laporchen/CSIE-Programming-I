@@ -11,6 +11,7 @@ int main()
         printf("ERROR(Duplicate Cards or invaild card\n");
         return 0;
     }
+    /*
     printf("Before:\n");
     print_card(player1);
     print_card(player2);
@@ -43,5 +44,6 @@ int main()
     print_card(player2);
     print_card(player3);
     print_card(player4);
+    */
     return 0;
 }

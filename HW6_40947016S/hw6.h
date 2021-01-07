@@ -18,6 +18,8 @@ void moveback(i32 *arr);
 //hw0603
 void rotate(double *x, double *y, double theta);
 //hw0604
+void printPlane(i32 p[4]);
+void project(double *x, double *y, double *z, i32 ia, i32 ib, i32 ic, i32 id);
 //hw0605
 void print_card(ui8[]);
 void sort_card(ui8, void(*func));
