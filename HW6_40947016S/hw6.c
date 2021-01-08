@@ -144,3 +144,75 @@ i32 checks(ui8 a[], ui8 b[], ui8 c[], ui8 d[])
 	}
 	return 0;
 }
+void print_card(ui8 a[13])
+{
+	for (i32 i = 0; i < 13; i++)
+		printf("%2d ", a[i]);
+	printf("\n");
+	return;
+}
+void func01(ui8 a[13])
+{
+	for (i32 i = 0; i < 12; i++)
+	{
+		for (i32 j = i; j < 13; j++)
+		{
+			if ((a[i] + 11) % 13 < (a[j] + 11) % 13)
+			{
+				ui8 tmp = a[i];
+				a[i] = a[j];
+				a[j] = tmp;
+			}
+		}
+	}
+	return;
+}
+void func02(ui8 a[13])
+{
+	for (i32 i = 0; i < 13; i++)
+	{
+		for (i32 j = i; j < 13; j++)
+		{
+			if (((a[i] + 10) % 13) < ((a[j] + 10) % 13))
+			{
+				ui8 tmp = a[i];
+				a[i] = a[j];
+				a[j] = tmp;
+			}
+		}
+	}
+	return;
+}
+void func03(ui8 a[13])
+{
+	for (i32 i = 0; i < 13; i++)
+	{
+		for (i32 j = i; j < 13; j++)
+		{
+			if (((a[i] - 1) % 13) < ((a[j] - 1) % 13))
+			{
+				ui8 tmp = a[i];
+				a[i] = a[j];
+				a[j] = tmp;
+			}
+		}
+	}
+	for (i32 i = 0; i < 13; i++)
+	{
+		for (i32 j = i; j < 13; j++)
+		{
+			if ((a[i] - 1) / 13 > (a[j] - 1) / 13)
+			{
+				ui8 tmp = a[i];
+				a[i] = a[j];
+				a[j] = tmp;
+			}
+		}
+	}
+	return;
+}
+void sort_card(ui8 a[13], void func())
+{
+	func(a);
+	return;
+}
